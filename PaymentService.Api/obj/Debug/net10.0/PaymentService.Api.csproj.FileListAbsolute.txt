@@ -1,0 +1,8 @@
+E:\Dot_Net_Projects\FoodDeliveryApplication\PaymentService.Api\obj\Debug\net10.0\PaymentService.Api.csproj.AssemblyReference.cache
+E:\Dot_Net_Projects\FoodDeliveryApplication\PaymentService.Api\obj\Debug\net10.0\rpswa.dswa.cache.json
+E:\Dot_Net_Projects\FoodDeliveryApplication\PaymentService.Api\obj\Debug\net10.0\PaymentService.Api.GeneratedMSBuildEditorConfig.editorconfig
+E:\Dot_Net_Projects\FoodDeliveryApplication\PaymentService.Api\obj\Debug\net10.0\PaymentService.Api.AssemblyInfoInputs.cache
+E:\Dot_Net_Projects\FoodDeliveryApplication\PaymentService.Api\obj\Debug\net10.0\PaymentService.Api.AssemblyInfo.cs
+E:\Dot_Net_Projects\FoodDeliveryApplication\PaymentService.Api\obj\Debug\net10.0\PaymentService.Api.csproj.CoreCompileInputs.cache
+E:\Dot_Net_Projects\FoodDeliveryApplication\PaymentService.Api\obj\Debug\net10.0\PaymentService.Api.MvcApplicationPartsAssemblyInfo.cs
+E:\Dot_Net_Projects\FoodDeliveryApplication\PaymentService.Api\obj\Debug\net10.0\PaymentService.Api.MvcApplicationPartsAssemblyInfo.cache

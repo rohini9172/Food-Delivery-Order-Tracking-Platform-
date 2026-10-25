@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="IdentityService.Api/IdentityService.Api.csproj" />
+  <Project Path="OrderService.Api/OrderService.Api.csproj" />
+  <Project Path="PaymentService.Api/PaymentService.Api.csproj" />
+  <Project Path="Shared.Events/Shared.Events.csproj" />
+</Solution>
