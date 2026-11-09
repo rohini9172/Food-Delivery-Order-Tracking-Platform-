@@ -1,0 +1,100 @@
+# ============================================================
+# .NET / ASP.NET Core
+# ============================================================
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.rsuser
+*.DotSettings.user
+
+# EF Core migrations bundle
+efbundle
+efbundle.exe
+
+# Publish output
+publish/
+**/publish/
+
+# NuGet
+*.nupkg
+*.snupkg
+**/packages/
+!**/packages/build/
+nuget.config
+
+# ============================================================
+# Secrets & environment
+# ============================================================
+appsettings.Production.json
+**/appsettings.Production.json
+*.pfx
+*.p12
+*.key
+secrets.json
+
+# Keep appsettings.Development.json (no real secrets) but
+# exclude any local override files
+appsettings.Local.json
+**/appsettings.Local.json
+
+# ============================================================
+# Frontend — Node / Vite
+# ============================================================
+food-delivery-frontend/node_modules/
+food-delivery-frontend/dist/
+food-delivery-frontend/dist-ssr/
+food-delivery-frontend/.env.local
+food-delivery-frontend/.env.production
+food-delivery-frontend/*.local
+
+# Root-level node_modules (package.json at repo root)
+node_modules/
+
+# ============================================================
+# Logs
+# ============================================================
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ============================================================
+# OS
+# ============================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============================================================
+# IDEs
+# ============================================================
+
+# Visual Studio
+.vs/
+*.suo
+*.ntvs*
+*.njsproj
+*.sw?
+
+# JetBrains Rider
+.idea/
+*.DotSettings.user
+
+# VS Code (keep shared settings, ignore personal)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# ============================================================
+# Test results & coverage
+# ============================================================
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
