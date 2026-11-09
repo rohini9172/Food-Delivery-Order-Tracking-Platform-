@@ -172,3 +172,7 @@ E:\Dot_Net_Projects\FoodDeliveryApplication\OrderService.Api\obj\Debug\net10.0\O
 E:\Dot_Net_Projects\FoodDeliveryApplication\OrderService.Api\obj\Debug\net10.0\OrderService.Api.genruntimeconfig.cache
 E:\Dot_Net_Projects\FoodDeliveryApplication\OrderService.Api\obj\Debug\net10.0\ref\OrderService.Api.dll
 E:\Dot_Net_Projects\FoodDeliveryApplication\OrderService.Api\bin\Debug\net10.0\RabbitMQ.Client.dll
+E:\Dot_Net_Projects\FoodDeliveryApplication\OrderService.Api\obj\Debug\net10.0\OrderService.Api.sourcelink.json
+E:\Dot_Net_Projects\FoodDeliveryApplication\OrderService.Api\bin\Debug\net10.0\MassTransit.dll
+E:\Dot_Net_Projects\FoodDeliveryApplication\OrderService.Api\bin\Debug\net10.0\MassTransit.Abstractions.dll
+E:\Dot_Net_Projects\FoodDeliveryApplication\OrderService.Api\bin\Debug\net10.0\MassTransit.RabbitMqTransport.dll

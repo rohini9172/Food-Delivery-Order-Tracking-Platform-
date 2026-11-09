@@ -9,7 +9,94 @@ namespace OrderService.Api.Data
 
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<MenuItem> MenuItems { get; set; }
-        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<CartEntry> CartEntries { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Restaurant>()
+                .Property(restaurant => restaurant.Name)
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<MenuItem>(entity =>
+            {
+                entity.Property(menuItem => menuItem.Name).HasMaxLength(100);
+                entity.Property(menuItem => menuItem.Price).HasPrecision(18, 2);
+                entity.HasOne<Restaurant>()
+                    .WithMany(restaurant => restaurant.MenuItems)
+                    .HasForeignKey(menuItem => menuItem.RestaurantId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<CartEntry>(entity =>
+            {
+                entity.HasIndex(cartItem => new { cartItem.CustomerId, cartItem.MenuItemId })
+                    .IsUnique();
+                entity.HasOne(cartItem => cartItem.MenuItem)
+                    .WithMany()
+                    .HasForeignKey(cartItem => cartItem.MenuItemId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.Property(order => order.Status).HasMaxLength(20);
+                entity.Property(order => order.TotalAmount).HasPrecision(18, 2);
+                entity.HasIndex(order => order.CustomerId);
+                entity.HasOne(order => order.Restaurant)
+                    .WithMany()
+                    .HasForeignKey(order => order.RestaurantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<OrderItem>(entity =>
+            {
+                entity.ToTable("CartItems");
+                entity.Property(item => item.Name).HasMaxLength(100);
+                entity.Property(item => item.UnitPrice).HasPrecision(18, 2);
+                entity.HasOne<Order>()
+                    .WithMany(order => order.Items)
+                    .HasForeignKey(item => item.OrderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            var greenBowlId = Guid.Parse("a09a9b5b-1e6e-4e8d-9e11-6a4d5fb6d101");
+            var pizzaCornerId = Guid.Parse("a09a9b5b-1e6e-4e8d-9e11-6a4d5fb6d102");
+
+            modelBuilder.Entity<Restaurant>().HasData(
+                new Restaurant { Id = greenBowlId, Name = "Green Bowl Kitchen" },
+                new Restaurant { Id = pizzaCornerId, Name = "Pizza Corner" });
+
+            modelBuilder.Entity<MenuItem>().HasData(
+                new MenuItem
+                {
+                    Id = Guid.Parse("b10bab6c-2f7f-4f9e-8f22-7b5e6fc7d201"),
+                    RestaurantId = greenBowlId,
+                    Name = "Roasted Veggie Bowl",
+                    Price = 249m
+                },
+                new MenuItem
+                {
+                    Id = Guid.Parse("b10bab6c-2f7f-4f9e-8f22-7b5e6fc7d202"),
+                    RestaurantId = greenBowlId,
+                    Name = "Paneer Protein Bowl",
+                    Price = 289m
+                },
+                new MenuItem
+                {
+                    Id = Guid.Parse("b10bab6c-2f7f-4f9e-8f22-7b5e6fc7d203"),
+                    RestaurantId = pizzaCornerId,
+                    Name = "Margherita Pizza",
+                    Price = 299m
+                },
+                new MenuItem
+                {
+                    Id = Guid.Parse("b10bab6c-2f7f-4f9e-8f22-7b5e6fc7d204"),
+                    RestaurantId = pizzaCornerId,
+                    Name = "Farmhouse Pizza",
+                    Price = 379m
+                });
+        }
     }
 }

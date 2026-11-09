@@ -1,4 +1,4 @@
-export default function Button({ children, onClick, type = "button", color = "blue" }) {
+export default function Button({ children, onClick, type = "button", color = "blue", disabled = false }) {
   const base = "px-4 py-2 rounded font-semibold transition-colors";
   const colors = {
     blue: "bg-blue-500 text-white hover:bg-blue-600",
@@ -8,7 +8,7 @@ export default function Button({ children, onClick, type = "button", color = "bl
   };
 
   return (
-    <button type={type} onClick={onClick} className={`${base} ${colors[color]}`}>
+    <button type={type} onClick={onClick} disabled={disabled} className={`${base} ${colors[color]} disabled:cursor-not-allowed disabled:opacity-50`}>
       {children}
     </button>
   );

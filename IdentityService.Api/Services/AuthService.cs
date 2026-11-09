@@ -19,16 +19,16 @@ namespace IdentityService.Api.Services
 
         public async Task<string?> RegisterAsync(RegisterDto dto)
         {
-            if (await _userRepository.UserExistsAsync(dto.Username))
+            var username = dto.Username.Trim();
+            if (username.Length < 3 || await _userRepository.UserExistsAsync(username))
                 return null;
 
             var user = new ApplicationUser
             {
-                Username = dto.Username,
-                Role = dto.Role
+                Username = username,
+                Role = "Customer"
             };
 
-            // ✅ Hash password properly
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
 
             await _userRepository.AddUserAsync(user);
@@ -37,7 +37,11 @@ namespace IdentityService.Api.Services
 
         public async Task<string?> LoginAsync(LoginDto dto)
         {
-            var user = await _userRepository.GetByUsernameAsync(dto.Username);
+            var username = dto.Username.Trim();
+            if (username.Length < 3)
+                return null;
+
+            var user = await _userRepository.GetByUsernameAsync(username);
             if (user == null) return null;
 
             // ✅ Verify password

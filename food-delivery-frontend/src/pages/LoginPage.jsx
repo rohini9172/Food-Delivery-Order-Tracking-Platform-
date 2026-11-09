@@ -1,35 +1,87 @@
-import { useState, useContext } from "react";
-import api from "../api/axios";
+import { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import api from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
 
 export default function LoginPage() {
-  const [form, setForm] = useState({ username: "", password: "" });
-  const { login } = useContext(AuthContext); // ✅ Now this will work
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
+  const [form, setForm] = useState({
+    username: location.state?.registeredUsername ?? "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (event) => {
+    setForm((current) => ({ ...current, [event.target.name]: event.target.value }));
+  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+
     try {
-      const res = await api.post("/api/Auth/login", form);
-      login(res.data.token);
-      console.log(res.data.token);
-      toast.success("Logged in!");
-
+      const response = await api.post("/api/auth/login", {
+        username: form.username.trim(),
+        password: form.password,
+      });
+      login(response.data.token);
+      toast.success("Welcome back!");
+      navigate(location.state?.from?.pathname ?? "/", { replace: true });
     } catch (err) {
-      toast.error(err.response?.data || "Login failed");
+      const message = err.response?.data?.message ?? "Could not log in. Check your username and password.";
+      setError(message);
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto">
-      <h1 className="text-xl font-bold mb-4">Login</h1>
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <input name="username" placeholder="Username" onChange={handleChange} className="border p-2 w-full" />
-        <input name="password" type="password" placeholder="Password" onChange={handleChange} className="border p-2 w-full" />
-        <button type="submit" className="bg-green-500 text-white px-4 py-2">Login</button>
-      </form>
-    </div>
+    <main className="auth-page">
+      <section className="auth-card" aria-labelledby="login-title">
+        <p className="auth-eyebrow">Good to see you again</p>
+        <h1 id="login-title">Log in</h1>
+        <p className="auth-description">Sign in to continue to your food orders.</p>
+        <form onSubmit={handleSubmit} className="auth-form">
+          <label htmlFor="username">Username</label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            value={form.username}
+            onChange={handleChange}
+            autoComplete="username"
+            minLength={3}
+            maxLength={50}
+            required
+          />
+
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            value={form.password}
+            onChange={handleChange}
+            autoComplete="current-password"
+            maxLength={100}
+            required
+          />
+
+          {error && <p className="form-error" role="alert">{error}</p>}
+          <button type="submit" className="auth-submit" disabled={isSubmitting}>
+            {isSubmitting ? "Logging in..." : "Log in"}
+          </button>
+        </form>
+        <p className="auth-footer">
+          New here? <Link to="/register">Create an account</Link>
+        </p>
+      </section>
+    </main>
   );
 }

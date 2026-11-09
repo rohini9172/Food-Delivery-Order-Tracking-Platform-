@@ -1,20 +1,29 @@
-using PaymentService.Api.Services;
+using Microsoft.EntityFrameworkCore;
+using MassTransit;
+using PaymentService.Api.Data;
 using PaymentService.Api.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<RabbitMqPublisher>();
-builder.Services.AddScoped<IPaymentService, PaymentServiceImpl>();
+builder.Services.AddDbContext<PaymentDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddMassTransit(configuration =>
+{
+    configuration.AddConsumer<OrderCreatedConsumer>();
+    configuration.UsingRabbitMq((context, rabbitMq) =>
+    {
+        rabbitMq.Host("localhost", "/", host =>
+        {
+            host.Username("guest");
+            host.Password("guest");
+        });
+
+        rabbitMq.UseMessageRetry(retry =>
+            retry.Intervals(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(5)));
+        rabbitMq.ConfigureEndpoints(context);
+    });
+});
 
 var app = builder.Build();
-
-app.UseSwagger();
-app.UseSwaggerUI();
-
-app.MapControllers();
-
 app.Run();

@@ -171,3 +171,4 @@ E:\Dot_Net_Projects\FoodDeliveryApplication\IdentityService.Api\obj\Debug\net10.
 E:\Dot_Net_Projects\FoodDeliveryApplication\IdentityService.Api\obj\Debug\net10.0\IdentityService.Api.pdb
 E:\Dot_Net_Projects\FoodDeliveryApplication\IdentityService.Api\obj\Debug\net10.0\IdentityService.Api.genruntimeconfig.cache
 E:\Dot_Net_Projects\FoodDeliveryApplication\IdentityService.Api\obj\Debug\net10.0\ref\IdentityService.Api.dll
+E:\Dot_Net_Projects\FoodDeliveryApplication\IdentityService.Api\obj\Debug\net10.0\IdentityService.Api.sourcelink.json

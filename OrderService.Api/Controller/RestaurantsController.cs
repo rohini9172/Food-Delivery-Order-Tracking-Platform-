@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OrderService.Api.Contracts;
 using OrderService.Api.Models;
 using OrderService.Api.Services;
 
@@ -21,11 +23,20 @@ namespace OrderService.Api.Controllers
             return restaurant == null ? NotFound() : Ok(restaurant);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(Restaurant restaurant)
+        [HttpGet("{id:guid}/menu")]
+        public async Task<IActionResult> GetMenu(Guid id)
         {
+            var restaurant = await _service.GetRestaurantAsync(id);
+            return restaurant == null ? NotFound() : Ok(restaurant.MenuItems);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Add(CreateRestaurantRequest request)
+        {
+            var restaurant = new Restaurant { Name = request.Name.Trim() };
             await _service.AddRestaurantAsync(restaurant);
-            return Ok("Restaurant added");
+            return CreatedAtAction(nameof(Get), new { id = restaurant.Id }, restaurant);
         }
     }
 }

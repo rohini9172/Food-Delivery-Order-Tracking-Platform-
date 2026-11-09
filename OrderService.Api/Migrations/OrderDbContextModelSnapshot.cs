@@ -22,16 +22,16 @@ namespace OrderService.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("OrderService.Api.Models.CartItem", b =>
+            modelBuilder.Entity("OrderService.Api.Models.CartEntry", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MenuItemId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("OrderId")
+                    b.Property<Guid>("MenuItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
@@ -39,9 +39,12 @@ namespace OrderService.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("MenuItemId");
 
-                    b.ToTable("CartItems");
+                    b.HasIndex("CustomerId", "MenuItemId")
+                        .IsUnique();
+
+                    b.ToTable("CartEntries");
                 });
 
             modelBuilder.Entity("OrderService.Api.Models.MenuItem", b =>
@@ -52,9 +55,11 @@ namespace OrderService.Api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("RestaurantId")
@@ -65,6 +70,36 @@ namespace OrderService.Api.Migrations
                     b.HasIndex("RestaurantId");
 
                     b.ToTable("MenuItems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b10bab6c-2f7f-4f9e-8f22-7b5e6fc7d201"),
+                            Name = "Roasted Veggie Bowl",
+                            Price = 249m,
+                            RestaurantId = new Guid("a09a9b5b-1e6e-4e8d-9e11-6a4d5fb6d101")
+                        },
+                        new
+                        {
+                            Id = new Guid("b10bab6c-2f7f-4f9e-8f22-7b5e6fc7d202"),
+                            Name = "Paneer Protein Bowl",
+                            Price = 289m,
+                            RestaurantId = new Guid("a09a9b5b-1e6e-4e8d-9e11-6a4d5fb6d101")
+                        },
+                        new
+                        {
+                            Id = new Guid("b10bab6c-2f7f-4f9e-8f22-7b5e6fc7d203"),
+                            Name = "Margherita Pizza",
+                            Price = 299m,
+                            RestaurantId = new Guid("a09a9b5b-1e6e-4e8d-9e11-6a4d5fb6d102")
+                        },
+                        new
+                        {
+                            Id = new Guid("b10bab6c-2f7f-4f9e-8f22-7b5e6fc7d204"),
+                            Name = "Farmhouse Pizza",
+                            Price = 379m,
+                            RestaurantId = new Guid("a09a9b5b-1e6e-4e8d-9e11-6a4d5fb6d102")
+                        });
                 });
 
             modelBuilder.Entity("OrderService.Api.Models.Order", b =>
@@ -79,13 +114,56 @@ namespace OrderService.Api.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("RestaurantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("RestaurantId");
+
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("OrderService.Api.Models.OrderItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MenuItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("OrderService.Api.Models.Restaurant", b =>
@@ -96,20 +174,35 @@ namespace OrderService.Api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Restaurants");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a09a9b5b-1e6e-4e8d-9e11-6a4d5fb6d101"),
+                            Name = "Green Bowl Kitchen"
+                        },
+                        new
+                        {
+                            Id = new Guid("a09a9b5b-1e6e-4e8d-9e11-6a4d5fb6d102"),
+                            Name = "Pizza Corner"
+                        });
                 });
 
-            modelBuilder.Entity("OrderService.Api.Models.CartItem", b =>
+            modelBuilder.Entity("OrderService.Api.Models.CartEntry", b =>
                 {
-                    b.HasOne("OrderService.Api.Models.Order", null)
-                        .WithMany("CartItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("OrderService.Api.Models.MenuItem", "MenuItem")
+                        .WithMany()
+                        .HasForeignKey("MenuItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("MenuItem");
                 });
 
             modelBuilder.Entity("OrderService.Api.Models.MenuItem", b =>
@@ -123,7 +216,26 @@ namespace OrderService.Api.Migrations
 
             modelBuilder.Entity("OrderService.Api.Models.Order", b =>
                 {
-                    b.Navigation("CartItems");
+                    b.HasOne("OrderService.Api.Models.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Restaurant");
+                });
+
+            modelBuilder.Entity("OrderService.Api.Models.OrderItem", b =>
+                {
+                    b.HasOne("OrderService.Api.Models.Order", null)
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrderService.Api.Models.Order", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("OrderService.Api.Models.Restaurant", b =>

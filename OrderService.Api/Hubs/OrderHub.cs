@@ -1,19 +1,18 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using OrderService.Api.Security;
 
 namespace OrderService.Api.Hubs
 {
+    [Authorize(Roles = "Customer")]
     public class OrderHub : Hub
     {
-        // Called when a client connects
-        public override async Task OnConnectedAsync()
+        public async Task JoinCustomerGroup()
         {
-            await base.OnConnectedAsync();
-        }
+            if (!Context.User!.TryGetCustomerId(out var customerId))
+                throw new HubException("A valid customer identity is required.");
 
-        // Optional: allow clients to join a group per customer
-        public async Task JoinCustomerGroup(string customerId)
-        {
-            await Groups.AddToGroupAsync(Context.ConnectionId, customerId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, customerId.ToString());
         }
     }
 }

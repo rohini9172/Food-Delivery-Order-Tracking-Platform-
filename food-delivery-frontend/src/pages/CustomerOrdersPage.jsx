@@ -4,16 +4,20 @@ import { Link } from "react-router-dom";
 
 export default function CustomerOrdersPage() {
   const [orders, setOrders] = useState([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Assuming backend has endpoint: GET /api/orders/my
     api.get("/api/orders/my")
       .then(res => setOrders(res.data))
-      .catch(err => console.error("Error fetching orders:", err));
+      .catch(() => setError("Could not load your orders. Please try again."))
+      .finally(() => setLoading(false));
   }, []);
 
+  if (loading) return <p className="p-6">Loading your orders...</p>;
+  if (error) return <p className="p-6" role="alert">{error}</p>;
   if (!orders.length) {
-    return <p className="p-6">No orders yet.</p>;
+    return <p className="p-6">No orders yet. <Link className="text-blue-600 underline" to="/">Browse restaurants</Link></p>;
   }
 
   return (

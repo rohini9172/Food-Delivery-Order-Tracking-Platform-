@@ -18,16 +18,22 @@ namespace IdentityService.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto dto)
         {
+            if (string.IsNullOrWhiteSpace(dto.Username) || dto.Username.Trim().Length < 3)
+                return BadRequest(new { message = "Username must contain at least 3 non-space characters." });
+
             var result = await _authService.RegisterAsync(dto);
-            if (result == null) return BadRequest("Username already exists");
-            return Ok(result);
+            if (result == null) return Conflict(new { message = "Username already exists." });
+            return StatusCode(StatusCodes.Status201Created, new { message = result });
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
+            if (string.IsNullOrWhiteSpace(dto.Username))
+                return BadRequest(new { message = "Username cannot be empty." });
+
             var token = await _authService.LoginAsync(dto);
-            if (token == null) return Unauthorized("Invalid credentials");
+            if (token == null) return Unauthorized(new { message = "Invalid username or password." });
             return Ok(new { token });
         }
     }

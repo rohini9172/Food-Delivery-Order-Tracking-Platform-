@@ -1,15 +1,28 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Navbar() {
+  const { user, logout } = useContext(AuthContext);
+
   return (
-    <nav className="bg-blue-600 text-white px-6 py-3 flex justify-between items-center">
-      <h1 className="text-xl font-bold">Food Delivery</h1>
-      <div className="space-x-4">
-        <Link to="/" className="hover:underline">Home</Link>
-        <Link to="/cart" className="hover:underline">Cart</Link>
-        <Link to="/orders" className="hover:underline">My Orders</Link>
-        <Link to="/profile" className="hover:underline">Profile</Link>
-        <Link to="/admin" className="hover:underline">Admin</Link>
+    <nav className="site-nav">
+      <Link to="/" className="site-brand">Food Delivery</Link>
+      <div className="site-nav-links">
+        <Link to="/">Restaurants</Link>
+        <Link to="/cart">Cart</Link>
+        {user ? (
+          <>
+            <Link to="/orders">My Orders</Link>
+            <span className="nav-username">{user.username}</span>
+            <button type="button" className="nav-button" onClick={logout}>Log out</button>
+          </>
+        ) : (
+          <>
+            <Link to="/login">Log in</Link>
+            <Link to="/register" className="nav-register">Create account</Link>
+          </>
+        )}
       </div>
     </nav>
   );

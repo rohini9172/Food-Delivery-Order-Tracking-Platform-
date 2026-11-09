@@ -9,3 +9,4 @@ E:\Dot_Net_Projects\FoodDeliveryApplication\Shared.Events\obj\Debug\net10.0\Shar
 E:\Dot_Net_Projects\FoodDeliveryApplication\Shared.Events\obj\Debug\net10.0\refint\Shared.Events.dll
 E:\Dot_Net_Projects\FoodDeliveryApplication\Shared.Events\obj\Debug\net10.0\Shared.Events.pdb
 E:\Dot_Net_Projects\FoodDeliveryApplication\Shared.Events\obj\Debug\net10.0\ref\Shared.Events.dll
+E:\Dot_Net_Projects\FoodDeliveryApplication\Shared.Events\obj\Debug\net10.0\Shared.Events.sourcelink.json

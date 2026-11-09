@@ -1,11 +1,12 @@
+using OrderService.Api.Contracts;
 using OrderService.Api.Models;
 
 namespace OrderService.Api.Services
 {
     public interface IOrderService
     {
-        Task<Order?> GetOrderAsync(Guid id);
-        Task<Order> PlaceOrderAsync(Order order);
-        Task UpdateOrderStatusAsync(Guid id, string status);
+        Task<OrderResponse?> GetOrderAsync(Guid id, Guid customerId);
+        Task<IReadOnlyList<OrderResponse>> GetMyOrdersAsync(Guid customerId);
+        Task<OrderResponse?> PlaceOrderAsync(Guid customerId);
     }
 }
