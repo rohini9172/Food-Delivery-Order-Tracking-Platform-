@@ -140,22 +140,3 @@ npm run lint
 npm run build
 ```
 
-## Interview practice
-
-1. **Why use an API Gateway?** It gives the frontend one address and routes requests to the right service.
-2. **Why separate databases?** Each service owns its data and can change it without directly depending on another service's schema.
-3. **Why RabbitMQ?** It lets Order and Payment communicate asynchronously instead of waiting on a direct service-to-service HTTP request.
-4. **What does MassTransit do?** It provides typed message publishing/consuming, RabbitMQ setup, and retry configuration.
-5. **How is a duplicate payment event handled?** PaymentDb has a unique OrderId index, and the consumer checks for an existing record before creating one.
-6. **Why is a new order Pending first?** Payment is processed asynchronously, so the final result is not known at order creation time.
-7. **How does the browser get a live status change?** Order Service sends a SignalR event to the group for that authenticated customer's ID.
-8. **How does the app protect a customer's orders?** It reads the customer ID from the validated JWT and filters order queries by that ID.
-9. **Why store order item name and price in the order?** They are snapshots, so later menu edits do not change the customer's order history.
-10. **Is the payment integration production-ready?** No. It is a mock for learning; a real provider would need secure provider calls, stronger idempotency, and reconciliation.
-
-## Resume bullets
-
-- Built a .NET 10 food ordering platform with separate Identity, Order, and Payment microservices and an API Gateway.
-- Implemented customer authentication with JWT, role-based authorization, and customer-scoped order access.
-- Integrated RabbitMQ and MassTransit for asynchronous order-payment events, retry handling, and idempotent mock payment records.
-- Delivered a React frontend with restaurant browsing, cart and order history, plus SignalR live order status updates.
