@@ -71,7 +71,6 @@ var app = builder.Build();
 app.UseCors("AllowReactApp");
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapReverseProxy();
 
 app.Run();

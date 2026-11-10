@@ -60,6 +60,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
 // Seed admin account on startup
 using (var scope = app.Services.CreateScope())
 {

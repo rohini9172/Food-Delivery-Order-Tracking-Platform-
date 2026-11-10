@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PaymentDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+    
+
 builder.Services.AddMassTransit(configuration =>
 {
     configuration.AddConsumer<OrderCreatedConsumer>();

@@ -351,14 +351,4 @@ cd food-delivery-frontend && npm run lint && npm run build
 
 ---
 
-## Author
-
-**[Your Name]**
-
-- GitHub: [@your-username](https://github.com/your-username)
-- LinkedIn: [linkedin.com/in/your-profile](https://linkedin.com/in/your-profile)
-- Email: your.email@example.com
-
----
-
 > Built with .NET 10 · React 19 · RabbitMQ · SignalR · SQL Server
