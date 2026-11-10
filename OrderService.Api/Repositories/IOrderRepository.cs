@@ -6,6 +6,7 @@ namespace OrderService.Api.Repositories
     {
         Task<Order?> GetByIdAsync(Guid id);
         Task<IReadOnlyList<Order>> GetByCustomerIdAsync(Guid customerId);
+        Task<IReadOnlyList<Order>> GetAllAsync();
         Task AddAsync(Order order);
     }
 }

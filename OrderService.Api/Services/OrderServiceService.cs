@@ -36,6 +36,12 @@ namespace OrderService.Api.Services
             return orders.Select(ToResponse).ToArray();
         }
 
+        public async Task<IReadOnlyList<OrderResponse>> GetAllOrdersAsync()
+        {
+            var orders = await _repo.GetAllAsync();
+            return orders.Select(ToResponse).ToArray();
+        }
+
         public async Task<OrderResponse?> PlaceOrderAsync(Guid customerId)
         {
             var cartEntries = await _context.CartEntries
@@ -98,6 +104,7 @@ namespace OrderService.Api.Services
 
             return new OrderResponse(
                 order.Id,
+                order.CustomerId,
                 order.Restaurant?.Name,
                 order.TotalAmount,
                 order.Status,

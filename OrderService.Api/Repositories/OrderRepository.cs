@@ -23,6 +23,13 @@ namespace OrderService.Api.Repositories
                 .OrderByDescending(order => order.CreatedAt)
                 .ToListAsync();
 
+        public async Task<IReadOnlyList<Order>> GetAllAsync() =>
+            await _context.Orders
+                .Include(order => order.Restaurant)
+                .Include(order => order.Items)
+                .OrderByDescending(order => order.CreatedAt)
+                .ToListAsync();
+
         public async Task AddAsync(Order order)
         {
             _context.Orders.Add(order);

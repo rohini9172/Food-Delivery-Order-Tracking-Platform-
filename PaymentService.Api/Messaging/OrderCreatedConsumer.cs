@@ -25,7 +25,7 @@ public class OrderCreatedConsumer : IConsumer<OrderCreated>
 
         if (payment is null)
         {
-            var succeeded = Random.Shared.Next(0, 2) == 0;
+            var succeeded = Random.Shared.Next(0, 10) < 8;
             payment = new PaymentRecord
             {
                 OrderId = order.OrderId,

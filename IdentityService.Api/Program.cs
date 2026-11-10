@@ -60,6 +60,28 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Seed admin account on startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
+    db.Database.Migrate();
+
+    const string adminUsername = "admin";
+    if (!db.Users.Any(u => u.Username == adminUsername))
+    {
+        var admin = new IdentityService.Api.Models.ApplicationUser
+        {
+            Id       = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+            Username = adminUsername,
+            Role     = "Admin"
+        };
+        var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<IdentityService.Api.Models.ApplicationUser>();
+        admin.PasswordHash = hasher.HashPassword(admin, "Admin@1234");
+        db.Users.Add(admin);
+        db.SaveChanges();
+    }
+}
+
 app.UseSwagger();
 app.UseSwaggerUI();
 

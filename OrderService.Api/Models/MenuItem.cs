@@ -13,6 +13,9 @@ namespace OrderService.Api.Models
         [Range(typeof(decimal), "0.01", "100000")]
         public decimal Price { get; set; }
 
+        [StringLength(500)]
+        public string? ImageUrl { get; set; }
+
         public Guid RestaurantId { get; set; }
     }
 }

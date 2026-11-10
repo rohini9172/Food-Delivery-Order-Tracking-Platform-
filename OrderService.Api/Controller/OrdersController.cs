@@ -7,13 +7,14 @@ namespace OrderService.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Customer")]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _service;
         public OrdersController(IOrderService service) => _service = service;
 
         [HttpGet("my")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> GetMyOrders()
         {
             if (!User.TryGetCustomerId(out var customerId))
@@ -23,6 +24,7 @@ namespace OrderService.Api.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> Get(Guid id)
         {
             if (!User.TryGetCustomerId(out var customerId))
@@ -33,6 +35,7 @@ namespace OrderService.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> Place()
         {
             if (!User.TryGetCustomerId(out var customerId))
@@ -43,5 +46,10 @@ namespace OrderService.Api.Controllers
                 ? BadRequest(new { message = "Add at least one item to your cart before placing an order." })
                 : CreatedAtAction(nameof(Get), new { id = order.Id }, order);
         }
+
+        [HttpGet("admin/all")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAll() =>
+            Ok(await _service.GetAllOrdersAsync());
     }
 }

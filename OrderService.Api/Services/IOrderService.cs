@@ -7,6 +7,7 @@ namespace OrderService.Api.Services
     {
         Task<OrderResponse?> GetOrderAsync(Guid id, Guid customerId);
         Task<IReadOnlyList<OrderResponse>> GetMyOrdersAsync(Guid customerId);
+        Task<IReadOnlyList<OrderResponse>> GetAllOrdersAsync();
         Task<OrderResponse?> PlaceOrderAsync(Guid customerId);
     }
 }

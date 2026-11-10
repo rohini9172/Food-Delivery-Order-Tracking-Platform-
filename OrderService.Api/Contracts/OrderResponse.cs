@@ -2,6 +2,7 @@ namespace OrderService.Api.Contracts
 {
     public record OrderResponse(
         Guid Id,
+        Guid CustomerId,
         string? RestaurantName,
         decimal TotalAmount,
         string Status,
